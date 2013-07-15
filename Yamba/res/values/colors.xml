@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="default_warning">#FFFF9900</color>
+    <color name="default_error">@android:color/holo_red_light</color>
+    <color name="status_counter_warning">@color/default_warning</color>
+    <color name="status_counter_error">@color/default_error</color>
+
+</resources>
