@@ -3,6 +3,7 @@ package com.twitter.android.yamba;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +36,8 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     private int statusCounterWarningColor;
 
     private int statusCounterErrorColor;
+    
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         this.statusCounterWarningColor = super.getResources().getColor(
                 R.color.status_counter_warning);
         this.statusCounterErrorColor = super.getResources().getColor(R.color.status_counter_error);
+        
+        this.handler = new Handler();
     }
 
     @Override
@@ -91,7 +96,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
                     };
                     
-                    StatusActivity.this.runOnUiThread(runOnUiThread);
+                    StatusActivity.this.handler.post(runOnUiThread);
 
                 } catch (YambaClientException e) {
                     Log.wtf(TAG, "Failed to post status", e);
