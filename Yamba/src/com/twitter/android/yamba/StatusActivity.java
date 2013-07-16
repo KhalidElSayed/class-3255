@@ -2,10 +2,8 @@
 package com.twitter.android.yamba;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,10 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.marakana.android.yamba.clientlib.YambaClient;
-import com.marakana.android.yamba.clientlib.YambaClientException;
 
 public class StatusActivity extends Activity implements OnClickListener, TextWatcher {
 
@@ -41,6 +35,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_status);
 
         this.statusButton = (Button) super.findViewById(R.id.status_button);
@@ -68,48 +63,14 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
     @Override
     public void onClick(View view) {
-        final YambaClient yambaClient = new YambaClient("student", "password");
         String status = this.statusText.getText().toString();
-        Log.d(TAG, "Posting status of " + status.length() + " chars");
+        Log.d(TAG, "Submitting request to post status via StatusUpdateService");
+        Intent intent = new Intent(this, StatusUpdateService.class);
+        intent.putExtra("status", status);
+        super.startService(intent);
 
-        final ProgressDialog dialog = ProgressDialog.show(this, null, "Posting....");
-        
-        new AsyncTask<String, Void, Long>() {
-            @Override
-            protected Long doInBackground(String... params) {
-                // runs on a background thread
-                try {
-                    long t = SystemClock.uptimeMillis();
-                    yambaClient.postStatus(params[0]);
-                    Thread.sleep(7500);
-                    t = SystemClock.uptimeMillis() - t;
-                    Log.d(TAG, "Posted status");
-                    return t;
-                } catch (YambaClientException e) {
-                    Log.wtf(TAG, "Failed to post status", e);
-                    return null;
-                    // this indicates an error (report it on the UI thread)
-                } catch (InterruptedException e) {
-                    Log.w(TAG, "Oh well....");
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Long result) {
-                dialog.dismiss();
-                // runs on the UI thread
-                if (result == null) {
-                    Toast.makeText(StatusActivity.this, R.string.status_update_failure,
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    StatusActivity.this.statusText.getText().clear();
-                    String notification = StatusActivity.this.getString(
-                            R.string.status_update_success, result / 1000.00);
-                    Toast.makeText(StatusActivity.this, notification, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute(status);
+        // TODO: recover from failures!!!
+        this.statusText.getText().clear();
     }
 
     @Override
