@@ -52,6 +52,13 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         this.statusCounterWarningColor = super.getResources().getColor(
                 R.color.status_counter_warning);
         this.statusCounterErrorColor = super.getResources().getColor(R.color.status_counter_error);
+
+        String status = super.getIntent().getStringExtra("status");
+        if (status != null) {
+            Log.d(TAG, "Initializing status text");
+            this.statusText.setText(status);
+        }
+
     }
 
     @Override
@@ -68,8 +75,6 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         Intent intent = new Intent(this, StatusUpdateService.class);
         intent.putExtra("status", status);
         super.startService(intent);
-
-        // TODO: recover from failures!!!
         this.statusText.getText().clear();
     }
 

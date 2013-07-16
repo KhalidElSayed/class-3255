@@ -2,16 +2,20 @@
 package com.twitter.android.yamba;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.marakana.android.yamba.clientlib.YambaClient;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 
 public class StatusUpdateService extends IntentService {
     private static final String TAG = StatusUpdateService.class.getSimpleName();
+
+    private static final int NOTIFICATION_ID = 0;
 
     private YambaClient yambaClient;
 
@@ -31,17 +35,43 @@ public class StatusUpdateService extends IntentService {
         // runs in a background thread!!!
         String status = intent.getStringExtra("status");
         Log.d(TAG, "Posting status of " + status.length() + " chars");
+
+        CharSequence tickerText = this.getText(R.string.status_update_posting_text);
+
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(android.R.drawable.ic_dialog_email)
+                .setContentTitle(this.getText(R.string.status_update_posting_title))
+                .setContentText(tickerText).setTicker(tickerText).build();
+
+        NotificationManager notificationManager = (NotificationManager) super
+                .getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, notification);
+
         try {
             long t = SystemClock.uptimeMillis();
+            if (t > 0) {
+                throw new YambaClientException("#fail");
+            }
             yambaClient.postStatus(status);
             t = SystemClock.uptimeMillis() - t;
-            Log.d(TAG, "Posted status");
-            String notification = this.getString(R.string.status_update_success, t / 1000.00);
-            Toast.makeText(this, notification, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Posted status in " + t + " ms");
+            notificationManager.cancel(NOTIFICATION_ID);
         } catch (YambaClientException e) {
             Log.wtf(TAG, "Failed to post status", e);
-            // TODO: what should we do here???
-            Toast.makeText(this, R.string.status_update_failure, Toast.LENGTH_SHORT).show();
+            tickerText = this.getText(R.string.status_update_failure);
+
+            Intent recoveryIntent = new Intent(this, StatusActivity.class);
+            recoveryIntent.putExtra("status", status);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, recoveryIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notification = new Notification.Builder(this)
+                    .setSmallIcon(android.R.drawable.ic_dialog_email)
+                    .setContentTitle(this.getText(R.string.status_update_posting_title))
+                    .setContentText(tickerText).setTicker(tickerText)
+                    .setContentIntent(pendingIntent).build();
+
+            notificationManager.notify(NOTIFICATION_ID, notification);
         }
     }
 
