@@ -3,6 +3,7 @@ package com.twitter.android.yamba;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,6 +13,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.marakana.android.yamba.clientlib.YambaClient;
+import com.marakana.android.yamba.clientlib.YambaClientException;
 
 public class StatusActivity extends Activity implements OnClickListener, TextWatcher {
 
@@ -44,6 +49,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         this.statusCounterDefaultColor = this.statusCounter.getCurrentTextColor();
 
         this.statusButton.setOnClickListener(this);
+        this.statusButton.setEnabled(false);
         this.statusText.addTextChangedListener(this);
 
         this.statusCounterWarningColor = super.getResources().getColor(
@@ -60,7 +66,41 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG, this.statusText.getText().toString());
+        final YambaClient yambaClient = new YambaClient("student", "password");
+        final String status = this.statusText.getText().toString();
+        Log.d(TAG, "Posting status of " + status.length() + " chars");
+        new Thread() {
+            public void run() {
+                try {
+                    long t = SystemClock.uptimeMillis();
+                    yambaClient.postStatus(status);
+                    t = SystemClock.uptimeMillis() - t;
+
+                    final double duration = t / 1000.00;
+                    Runnable runOnUiThread = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            StatusActivity.this.statusText.getText().clear();
+                            Log.d(TAG, "Posted status");
+                            String notification = StatusActivity.this.getString(
+                                    R.string.status_update_success, duration);
+                            Toast.makeText(StatusActivity.this, notification, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+
+                    };
+                    
+                    StatusActivity.this.runOnUiThread(runOnUiThread);
+
+                } catch (YambaClientException e) {
+                    Log.wtf(TAG, "Failed to post status", e);
+                    Toast.makeText(StatusActivity.this, R.string.status_update_failure,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.start();
+
     }
 
     @Override
@@ -73,6 +113,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         } else {
             this.statusCounter.setTextColor(this.statusCounterDefaultColor);
         }
+        this.statusButton.setEnabled(0 <= length && length < maxChars);
         this.statusCounter.setText(String.valueOf(length));
     }
 

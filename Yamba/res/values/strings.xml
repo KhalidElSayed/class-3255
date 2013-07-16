@@ -3,7 +3,8 @@
 
     <string name="app_name">Yamba</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="status_update_failure">Failed to post your status!</string>
+    <string name="status_update_success">Posted your status in %.3f seconds!</string>
     <string name="status_text_hint">What\'s happening?</string>
     <string name="status_button_text">Tweet</string>
     <string name="max_chars">140</string>
