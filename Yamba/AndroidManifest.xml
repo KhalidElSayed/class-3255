@@ -26,7 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.twitter.android.yamba.PrefsActivity" />
+        <activity android:name="com.twitter.android.yamba.PrefsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service android:name="com.twitter.android.yamba.StatusUpdateService" />
         <service android:name="com.twitter.android.yamba.RefreshService" />

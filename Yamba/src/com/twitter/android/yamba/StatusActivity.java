@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StatusActivity extends Activity implements OnClickListener, TextWatcher,
         LocationListener {
@@ -118,6 +119,8 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     public void onClick(View view) {
         if (YambaApplication.getYambaApp(this).getYambaClient() == null) {
             Log.d(TAG, "Going to prefs...");
+            Toast.makeText(this, R.string.set_connection_settings_message, Toast.LENGTH_LONG)
+                    .show();
             super.startActivity(new Intent(this, PrefsActivity.class));
         } else {
             String status = this.statusText.getText().toString();

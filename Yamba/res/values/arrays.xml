@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="refresh_interval_entries">
+        <item>@string/refresh_interval_disabled</item>
+        <item>@string/refresh_interval_15m</item>
+        <item>@string/refresh_interval_30m</item>
+        <item>@string/refresh_interval_1h</item>
+        <item>@string/refresh_interval_12h</item>
+        <item>@string/refresh_interval_1d</item>
+    </string-array>
+
+    <string-array name="refresh_interval_entry_values">
+        <item>0</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+
+</resources>

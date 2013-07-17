@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="sendLocation"
+        android:summary="@string/send_location_pref_summary"
+        android:title="@string/send_location_pref_title" />
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/refresh_interval_entries"
+        android:entryValues="@array/refresh_interval_entry_values"
+        android:key="refreshInterval"
+        android:summary="@string/refresh_interval_prefs_summary"
+        android:title="@string/refresh_interval_prefs_title" />
+
     <PreferenceCategory
         android:summary="@string/connection_settings_pref_category_summary"
         android:title="@string/connection_settings_pref_category_title" >
@@ -14,16 +28,10 @@
             android:summary="@string/password_prefs_summary"
             android:title="@string/password_prefs_title" />
         <EditTextPreference
-            android:defaultValue="http://yamba.marakana.com/api"
+            android:defaultValue="@string/default_api_url"
             android:key="apiUrl"
             android:summary="@string/api_url_prefs_summary"
             android:title="@string/api_url_prefs_title" />
     </PreferenceCategory>
-
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="sendLocation"
-        android:summary="@string/send_location_pref_summary"
-        android:title="@string/send_location_pref_title" />
 
 </PreferenceScreen>
