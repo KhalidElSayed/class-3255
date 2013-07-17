@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.twitter.android.yamba.YambaApplication"
@@ -36,6 +37,12 @@
 
         <service android:name="com.twitter.android.yamba.StatusUpdateService" />
         <service android:name="com.twitter.android.yamba.RefreshService" />
+
+        <receiver android:name="com.twitter.android.yamba.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
