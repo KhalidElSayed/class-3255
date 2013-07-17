@@ -32,6 +32,7 @@ public class RefreshService extends IntentService {
                         if (YambaApplication.DEBUG)
                             Log.d(TAG, "Got " + status);
                         // save to db
+
                     }
 
                     @Override
