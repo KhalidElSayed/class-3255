@@ -3,6 +3,9 @@ package com.twitter.android.yamba;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class StatusActivity extends Activity implements OnClickListener, TextWatcher {
+public class StatusActivity extends Activity implements OnClickListener, TextWatcher,
+        LocationListener {
 
     private static final String TAG = StatusActivity.class.getSimpleName();
 
@@ -32,6 +36,10 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     private int statusCounterWarningColor;
 
     private int statusCounterErrorColor;
+
+    private LocationManager locationManager;
+
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +66,12 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         if (status != null) {
             Log.d(TAG, "Initializing status text");
             this.statusText.setText(status);
+            // what about the location?
         }
 
+        this.locationManager = (LocationManager) super.getSystemService(LOCATION_SERVICE);
+
+        this.location = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
     @Override
@@ -80,6 +92,20 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, this);
+        Log.d(TAG, "onResume()'d");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.locationManager.removeUpdates(this);
+        Log.d(TAG, "onPause()'d");
+    }
+
+    @Override
     public void onClick(View view) {
         if (YambaApplication.getYambaApp(this).getYambaClient() == null) {
             Log.d(TAG, "Going to prefs...");
@@ -89,6 +115,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
             Log.d(TAG, "Submitting request to post status via StatusUpdateService");
             Intent intent = new Intent(this, StatusUpdateService.class);
             intent.putExtra("status", status);
+            intent.putExtra("location", location);
             super.startService(intent);
             this.statusText.getText().clear();
         }
@@ -114,6 +141,24 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
     @Override
     public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d(TAG, "onLocationChanged()");
+        this.location = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
     }
 
 }

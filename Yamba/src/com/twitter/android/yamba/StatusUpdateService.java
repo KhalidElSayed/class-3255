@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.location.Location;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -31,7 +32,8 @@ public class StatusUpdateService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         // runs in a background thread!!!
         String status = intent.getStringExtra("status");
-        Log.d(TAG, "Posting status of " + status.length() + " chars");
+        Location location = intent.getParcelableExtra("location");
+        Log.d(TAG, "Posting status of " + status.length() + " chars from " + location);
 
         CharSequence tickerText = this.getText(R.string.status_update_posting_text);
 
@@ -50,7 +52,11 @@ public class StatusUpdateService extends IntentService {
             if (yambaClient == null) {
                 throw new YambaClientException("No client");
             }
-            yambaClient.postStatus(status);
+            if (location == null) {
+                yambaClient.postStatus(status);
+            } else {
+                yambaClient.postStatus(status, location.getLatitude(), location.getLongitude());
+            }
             t = SystemClock.uptimeMillis() - t;
             Log.d(TAG, "Posted status in " + t + " ms");
             notificationManager.cancel(NOTIFICATION_ID);
