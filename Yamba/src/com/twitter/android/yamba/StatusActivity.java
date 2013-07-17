@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -63,19 +64,34 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.status, menu);
         return true;
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                super.startActivity(new Intent(this, PrefsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
-        String status = this.statusText.getText().toString();
-        Log.d(TAG, "Submitting request to post status via StatusUpdateService");
-        Intent intent = new Intent(this, StatusUpdateService.class);
-        intent.putExtra("status", status);
-        super.startService(intent);
-        this.statusText.getText().clear();
+        if (YambaApplication.getYambaApp(this).getYambaClient() == null) {
+            Log.d(TAG, "Going to prefs...");
+            super.startActivity(new Intent(this, PrefsActivity.class));
+        } else {
+            String status = this.statusText.getText().toString();
+            Log.d(TAG, "Submitting request to post status via StatusUpdateService");
+            Intent intent = new Intent(this, StatusUpdateService.class);
+            intent.putExtra("status", status);
+            super.startService(intent);
+            this.statusText.getText().clear();
+        }
     }
 
     @Override

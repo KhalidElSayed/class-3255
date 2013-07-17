@@ -34,8 +34,8 @@
         android:id="@+id/status_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/status_button"
         android:layout_alignLeft="@+id/status_text"
-        android:layout_alignTop="@+id/status_button"
-        android:layout_alignBaseline="@+id/status_button" />
+        android:layout_alignTop="@+id/status_button" />
 
 </RelativeLayout>

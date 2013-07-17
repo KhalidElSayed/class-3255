@@ -17,8 +17,6 @@ public class StatusUpdateService extends IntentService {
 
     private static final int NOTIFICATION_ID = 0;
 
-    private YambaClient yambaClient;
-
     public StatusUpdateService() {
         super(TAG);
     }
@@ -26,7 +24,6 @@ public class StatusUpdateService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.yambaClient = new YambaClient("student", "password");
         Log.d(TAG, "onCreate()'d");
     }
 
@@ -49,8 +46,9 @@ public class StatusUpdateService extends IntentService {
 
         try {
             long t = SystemClock.uptimeMillis();
-            if (t > 0) {
-                throw new YambaClientException("#fail");
+            YambaClient yambaClient = YambaApplication.getYambaApp(this).getYambaClient();
+            if (yambaClient == null) {
+                throw new YambaClientException("No client");
             }
             yambaClient.postStatus(status);
             t = SystemClock.uptimeMillis() - t;
