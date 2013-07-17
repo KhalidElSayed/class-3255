@@ -68,10 +68,6 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
             this.statusText.setText(status);
             // what about the location?
         }
-
-        this.locationManager = (LocationManager) super.getSystemService(LOCATION_SERVICE);
-
-        this.location = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
     @Override
@@ -83,6 +79,9 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_refresh:
+                super.startService(new Intent(this, RefreshService.class));
+                return true;
             case R.id.action_settings:
                 super.startActivity(new Intent(this, PrefsActivity.class));
                 return true;
@@ -94,14 +93,24 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     @Override
     protected void onResume() {
         super.onResume();
-        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, this);
+        if (YambaApplication.getYambaApp(this).isSendLocationEnabled()) {
+            this.locationManager = (LocationManager) super.getSystemService(LOCATION_SERVICE);
+            this.location = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100,
+                    this);
+        } else {
+            this.locationManager = null;
+            this.location = null;
+        }
         Log.d(TAG, "onResume()'d");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.locationManager.removeUpdates(this);
+        if (this.locationManager != null) {
+            this.locationManager.removeUpdates(this);
+        }
         Log.d(TAG, "onPause()'d");
     }
 

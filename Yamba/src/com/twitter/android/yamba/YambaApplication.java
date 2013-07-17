@@ -15,6 +15,8 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 
     private static final String TAG = YambaApplication.class.getSimpleName();
 
+    public static final boolean DEBUG = true;
+
     public static YambaApplication getYambaApp(Context context) {
         return (YambaApplication) context.getApplicationContext();
     }
@@ -35,6 +37,10 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.d(TAG, "Preference change detected: " + key);
         this.yambaClient = null;
+    }
+
+    public boolean isSendLocationEnabled() {
+        return this.sharedPreferences.getBoolean("sendLocation", true);
     }
 
     public YambaClient getYambaClient() {

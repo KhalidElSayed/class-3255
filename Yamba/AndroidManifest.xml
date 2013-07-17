@@ -29,6 +29,7 @@
         <activity android:name="com.twitter.android.yamba.PrefsActivity" />
 
         <service android:name="com.twitter.android.yamba.StatusUpdateService" />
+        <service android:name="com.twitter.android.yamba.RefreshService" />
     </application>
 
 </manifest>

@@ -16,5 +16,10 @@
     <string name="password_prefs_summary">The password you use to login to Yamba</string>
     <string name="api_url_prefs_title">API URL</string>
     <string name="api_url_prefs_summary">The Yamba Service API URL</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="connection_settings_pref_category_title">Connection Settings</string>
+    <string name="connection_settings_pref_category_summary">Connection settings for your Yamba service</string>
+    <string name="send_location_pref_title">Send location?</string>
+    <string name="send_location_pref_summary">Include your location in the status messages you post?</string>
 
 </resources>
