@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="user_text_max_size">130sp</dimen>
+
+</resources>

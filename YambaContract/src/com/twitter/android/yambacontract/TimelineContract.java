@@ -2,6 +2,9 @@
 package com.twitter.android.yambacontract;
 
 import static com.twitter.android.yambacontract.TimelineContract.Columns.CREATED_AT;
+import static com.twitter.android.yambacontract.TimelineContract.Columns.ID;
+import static com.twitter.android.yambacontract.TimelineContract.Columns.MESSAGE;
+import static com.twitter.android.yambacontract.TimelineContract.Columns.USER;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -26,6 +29,10 @@ public final class TimelineContract {
 
     public static final String[] MAX_CREATED_AT_PROJECTION = {
         "max(" + CREATED_AT + ")"
+    };
+
+    public static final String[] SUMMARY_PROJECTION = {
+            ID, USER, CREATED_AT, MESSAGE
     };
 
     public static final class Columns {
