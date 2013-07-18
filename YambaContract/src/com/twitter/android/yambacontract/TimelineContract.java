@@ -1,6 +1,7 @@
 
 package com.twitter.android.yambacontract;
 
+import static com.twitter.android.yambacontract.TimelineContract.Columns.CREATED_AT;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -22,6 +23,10 @@ public final class TimelineContract {
             + MINOR_TYPE;
 
     public static final String DEFAULT_SORT_ORDER = Columns.CREATED_AT + " DESC";
+
+    public static final String[] MAX_CREATED_AT_PROJECTION = {
+        "max(" + CREATED_AT + ")"
+    };
 
     public static final class Columns {
 
