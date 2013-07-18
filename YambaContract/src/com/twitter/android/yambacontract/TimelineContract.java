@@ -1,6 +1,7 @@
 
 package com.twitter.android.yambacontract;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -10,13 +11,15 @@ public final class TimelineContract {
 
     public static final String PATH = "timeline";
 
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PATH);
+    public static final Uri CONTENT_URI = Uri.parse(ContentResolver.SCHEME_CONTENT + "://"
+            + AUTHORITY + "/" + PATH);
 
-    private static final String MINOR_TYPE = "vnd.twitter.status";
+    private static final String MINOR_TYPE = "/vnd.twitter.status";
 
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/" + MINOR_TYPE;
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + MINOR_TYPE;
 
-    public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/" + MINOR_TYPE;
+    public static final String CONTENT_TYPE_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + MINOR_TYPE;
 
     public static final String DEFAULT_SORT_ORDER = Columns.CREATED_AT + " DESC";
 
