@@ -43,6 +43,11 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="com.twitter.android.yamba.TimelineContentProvider"
+            android:authorities="com.twitter.android.yamba.provider"
+            android:exported="false" />
     </application>
 
 </manifest>

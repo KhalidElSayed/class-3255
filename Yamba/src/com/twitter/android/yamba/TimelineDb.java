@@ -1,6 +1,8 @@
 
 package com.twitter.android.yamba;
 
+import com.twitter.android.yambacontract.TimelineContract;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,7 +18,7 @@ public class TimelineDb extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 1;
 
-    private static final String TABLE = "timeline";
+    static final String TABLE = TimelineContract.PATH;
 
     public TimelineDb(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
