@@ -19,10 +19,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener, TextWatcher,
+public class StatusUpdateActivity extends Activity implements OnClickListener, TextWatcher,
         LocationListener {
 
-    private static final String TAG = StatusActivity.class.getSimpleName();
+    private static final String TAG = StatusUpdateActivity.class.getSimpleName();
 
     private Button statusButton;
 
@@ -46,7 +46,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_status);
+        setContentView(R.layout.activity_status_update);
 
         this.statusButton = (Button) super.findViewById(R.id.status_button);
         this.statusText = (EditText) super.findViewById(R.id.status_text);
@@ -73,7 +73,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.status, menu);
+        getMenuInflater().inflate(R.menu.status_update, menu);
         return true;
     }
 

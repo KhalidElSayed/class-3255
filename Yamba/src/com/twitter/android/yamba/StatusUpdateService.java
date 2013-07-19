@@ -64,7 +64,7 @@ public class StatusUpdateService extends IntentService {
             Log.wtf(TAG, "Failed to post status", e);
             tickerText = this.getText(R.string.status_update_failure);
 
-            Intent recoveryIntent = new Intent(this, StatusActivity.class);
+            Intent recoveryIntent = new Intent(this, StatusUpdateActivity.class);
             recoveryIntent.putExtra("status", status);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, recoveryIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
