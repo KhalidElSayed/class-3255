@@ -11,7 +11,6 @@ import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.util.Log;
 
 import com.marakana.android.yamba.clientlib.YambaClient;
@@ -19,6 +18,7 @@ import com.marakana.android.yamba.clientlib.YambaClient.Status;
 import com.marakana.android.yamba.clientlib.YambaClient.TimelineProcessor;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 import com.twitter.android.yambacontract.TimelineContract;
+import com.twitter.android.yambacontract.TimelineUtil;
 
 public class RefreshService extends IntentService implements TimelineProcessor {
     private static final String TAG = RefreshService.class.getSimpleName();
@@ -50,17 +50,11 @@ public class RefreshService extends IntentService implements TimelineProcessor {
         if (yambaClient == null) {
             Log.w(TAG, "Ignoring request to refresh when the client is missing");
         } else {
-            Cursor cursor = contentResolver.query(TimelineContract.CONTENT_URI,
-                    TimelineContract.MAX_CREATED_AT_PROJECTION, null, null, null);
+            this.maxCreatedAt = TimelineUtil.getStatusMaxCreatedAt(contentResolver);
             try {
-                this.maxCreatedAt = cursor.moveToFirst() ? cursor.getLong(0) : Long.MIN_VALUE;
-                try {
-                    yambaClient.fetchFriendsTimeline(this);
-                } catch (YambaClientException e) {
-                    Log.wtf(TAG, "Failed to fetch timeline", e);
-                }
-            } finally {
-                cursor.close();
+                yambaClient.fetchFriendsTimeline(this);
+            } catch (YambaClientException e) {
+                Log.wtf(TAG, "Failed to fetch timeline", e);
             }
         }
     }
