@@ -60,7 +60,8 @@ public class StatusDetailsFragment extends Fragment implements LoaderCallbacks<C
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.geocoder = new Geocoder(super.getActivity());
+        this.geocoder = new Geocoder(super.getActivity(),
+                super.getResources().getConfiguration().locale);
         super.getLoaderManager().initLoader(0, null, this);
 
     }
