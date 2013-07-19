@@ -6,9 +6,11 @@ import static com.twitter.android.yambacontract.TimelineContract.Columns.MESSAGE
 import static com.twitter.android.yambacontract.TimelineContract.Columns.USER;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -16,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
@@ -34,6 +36,10 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
             R.id.user, R.id.created_at, R.id.message
     };
 
+    public static interface OnStatusSelectedListener {
+        public void onStatusSelected(Uri statusUri);
+    }
+
     private static final ViewBinder DEFAULT_VIEW_BINDER = new ViewBinder() {
 
         @Override
@@ -41,15 +47,19 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
             if (view.getId() == R.id.created_at) {
                 long createdAt = cursor.getLong(columnIndex);
                 CharSequence relativeCreatedAt = DateUtils.getRelativeDateTimeString(
-                        view.getContext(), createdAt, 1000, DateUtils.DAY_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_ALL);
+                        view.getContext(), createdAt, DateUtils.MINUTE_IN_MILLIS,
+                        DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL);
                 ((TextView) view).setText(relativeCreatedAt);
+                // signal that we took care of binding this view
                 return true;
             } else {
+                // fall back to default view binding strategy of copying text
                 return false;
             }
         }
     };
+
+    private OnStatusSelectedListener onStatusSelectedListener;
 
     private SimpleCursorAdapter simpleCursorAdapter;
 
@@ -61,6 +71,8 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
                 CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         this.simpleCursorAdapter.setViewBinder(DEFAULT_VIEW_BINDER);
 
+        this.onStatusSelectedListener = (OnStatusSelectedListener) super.getActivity();
+
         super.setListAdapter(this.simpleCursorAdapter);
         super.getLoaderManager().initLoader(0, null, this);
         Log.d(TAG, "onActivityCreated()");
@@ -70,6 +82,13 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_timeline, container, false);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Log.d(TAG, "onListItemClick(..., ..., " + position + "," + id);
+        this.onStatusSelectedListener.onStatusSelected(ContentUris.withAppendedId(
+                TimelineContract.CONTENT_URI, id));
     }
 
     @Override

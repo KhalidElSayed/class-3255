@@ -36,6 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.twitter.android.yamba.StatusDetailsActivity" >
+
+            <!-- TODO: add support android.intent.action.VIEW -->
+        </activity>
 
         <service android:name="com.twitter.android.yamba.StatusUpdateService" />
         <service android:name="com.twitter.android.yamba.RefreshService" />
