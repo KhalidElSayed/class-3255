@@ -34,5 +34,10 @@
     <string name="action_compose">Compose</string>
     <string name="action_timeline">Timeline</string>
     <string name="action_repost">Repost</string>
+    <string name="yamba_permission_group_label">Yamba Permissions</string>
+    <string name="read_timeline_data_permission_description">Applications with this permission can read your entire Yamba timeline</string>
+    <string name="read_timeline_data_permission_label">Read your timeline</string>
+    <string name="write_timeline_data_permission_description">Applications with this permission can modify (and corrupt) your entire Yamba timeline</string>
+    <string name="write_timeline_data_permission_label">Write your timeline</string>
 
 </resources>

@@ -3,6 +3,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="com.twitter.android.yamba.READ_TIMELINE_DATA" />
+
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="17" />
