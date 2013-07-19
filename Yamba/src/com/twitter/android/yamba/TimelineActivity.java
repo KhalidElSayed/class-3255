@@ -3,6 +3,7 @@ package com.twitter.android.yamba;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +50,20 @@ public class TimelineActivity extends Activity implements TimelineFragment.OnSta
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        YambaApplication.getYambaApp(this).setInTimeline(true);
+        ((NotificationManager) super.getSystemService(NOTIFICATION_SERVICE))
+                .cancel(YambaApplication.NEW_STATUS_NOTIFICATION_ID);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        YambaApplication.getYambaApp(this).setInTimeline(false);
     }
 
     @Override

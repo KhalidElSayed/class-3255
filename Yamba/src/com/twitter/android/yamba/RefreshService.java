@@ -8,9 +8,13 @@ import static com.twitter.android.yambacontract.TimelineContract.Columns.LONGITU
 import static com.twitter.android.yambacontract.TimelineContract.Columns.MESSAGE;
 import static com.twitter.android.yambacontract.TimelineContract.Columns.USER;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.marakana.android.yamba.clientlib.YambaClient;
@@ -19,6 +23,7 @@ import com.marakana.android.yamba.clientlib.YambaClient.TimelineProcessor;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 import com.twitter.android.yambacontract.TimelineContract;
 import com.twitter.android.yambacontract.TimelineUtil;
+import com.twitter.android.yambacontract.YambaContract;
 
 public class RefreshService extends IntentService implements TimelineProcessor {
     private static final String TAG = RefreshService.class.getSimpleName();
@@ -28,6 +33,8 @@ public class RefreshService extends IntentService implements TimelineProcessor {
     private long maxCreatedAt;
 
     private int counter = 0;
+
+    private Status lastStatus;
 
     private final ContentValues contentValues = new ContentValues(6);
 
@@ -79,6 +86,7 @@ public class RefreshService extends IntentService implements TimelineProcessor {
             contentResolver.insert(TimelineContract.CONTENT_URI, contentValues);
             contentValues.clear();
             this.counter++;
+            this.lastStatus = status;
         } else {
             if (YambaApplication.DEBUG)
                 Log.d(TAG, "Skipping existing status " + status.getId());
@@ -87,13 +95,52 @@ public class RefreshService extends IntentService implements TimelineProcessor {
 
     @Override
     public void onStartProcessingTimeline() {
-        this.counter = 0;
+        // Debug.startMethodTracing(Environment.getExternalStorageDirectory().getAbsolutePath()
+        // + "/refresh.trace");
+
     }
 
     @Override
     public void onEndProcessingTimeline() {
         if (YambaApplication.DEBUG)
             Log.d(TAG, "Stored " + counter + " statuses");
+//        Debug.stopMethodTracing();
+
+        if (this.counter > 0) {
+            Intent broadcast = new Intent(YambaContract.ACTION_NEW_STATUS);
+            broadcast.putExtra("count", this.counter);
+            Bundle lastStatusBundle = new Bundle(4);
+            lastStatusBundle.putLong("id", this.lastStatus.getId());
+            lastStatusBundle.putString("user", this.lastStatus.getUser());
+            lastStatusBundle.putString("message", this.lastStatus.getMessage());
+            lastStatusBundle.putLong("createdAt", this.lastStatus.getCreatedAt().getTime());
+            lastStatusBundle.putDouble("latitude", this.lastStatus.getLatitude());
+            lastStatusBundle.putDouble("longitude", this.lastStatus.getLongitude());
+            broadcast.putExtra("lastStatus", lastStatusBundle);
+
+            if (YambaApplication.DEBUG)
+                Log.d(TAG, "Sending broadcast " + broadcast);
+            super.sendBroadcast(broadcast, Manifest.permission.RECEIVE_NEW_STATUS);
+
+            if (!YambaApplication.getYambaApp(this).isInTimeline()) {
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(
+                        Intent.ACTION_VIEW, TimelineContract.CONTENT_URI),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification = new Notification.Builder(this)
+                        .setSmallIcon(android.R.drawable.ic_dialog_email)
+                        .setContentTitle(this.getText(R.string.new_status_notification_title))
+                        .setContentText(
+                                this.getString(R.string.new_status_notification_text, counter))
+                        .setContentIntent(pendingIntent).build();
+
+                NotificationManager notificationManager = (NotificationManager) super
+                        .getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(YambaApplication.NEW_STATUS_NOTIFICATION_ID,
+                        notification);
+            }
+            this.lastStatus = null;
+            this.counter = 0;
+        }
     }
 
     @Override

@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="set_connection_settings_message">Please configure your connection settings first</string>
     <string name="status_update_posting_title">Posting…</string>
+    <string name="new_status_notification_title">Updated timeline</string>
+    <string name="new_status_notification_text">You have %d new status updates</string>
     <string name="status_update_posting_text">Posting your status update to Yamba</string>
     <string name="status_update_failure">Failed to post your status!</string>
     <string name="status_update_success">Posted your status in %.3f seconds!</string>
@@ -39,5 +41,7 @@
     <string name="read_timeline_data_permission_label">Read your timeline</string>
     <string name="write_timeline_data_permission_description">Applications with this permission can modify (and corrupt) your entire Yamba timeline</string>
     <string name="write_timeline_data_permission_label">Write your timeline</string>
+    <string name="receive_new_status_permission_label">Receive status notification</string>
+    <string name="receive_new_status_permission_description">Applications with this permissions can be notified when new status messages are fetched from Yamba</string>
 
 </resources>

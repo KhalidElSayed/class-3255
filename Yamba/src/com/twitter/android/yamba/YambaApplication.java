@@ -18,6 +18,8 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 
     private static final String TAG = YambaApplication.class.getSimpleName();
 
+    public static final int NEW_STATUS_NOTIFICATION_ID = 10001;
+
     public static final boolean DEBUG = true;
 
     public static YambaApplication getYambaApp(Context context) {
@@ -29,6 +31,8 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
     private SharedPreferences sharedPreferences;
 
     private PendingIntent startRefreshServicePendingIntent;
+
+    private boolean inTimeline = false;
 
     @Override
     public void onCreate() {
@@ -86,6 +90,14 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
             }
         }
         return yambaClient;
+    }
+
+    public boolean isInTimeline() {
+        return this.inTimeline;
+    }
+
+    public void setInTimeline(boolean inTimeline) {
+        this.inTimeline = inTimeline;
     }
 
     @Override
