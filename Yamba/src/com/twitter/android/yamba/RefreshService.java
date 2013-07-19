@@ -39,6 +39,7 @@ public class RefreshService extends IntentService implements TimelineProcessor {
     public void onCreate() {
         super.onCreate();
         this.contentResolver = super.getContentResolver();
+        Log.d(TAG, "onCreate()");
     }
 
     @Override

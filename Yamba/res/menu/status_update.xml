@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@android:drawable/ic_menu_rotate"
+        android:id="@+id/action_timeline"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
         android:orderInCategory="50"
         android:showAsAction="always|withText"
-        android:title="@string/action_refresh"/>
+        android:title="@string/action_timeline"/>
     <item
         android:id="@+id/action_settings"
         android:icon="@android:drawable/ic_menu_preferences"

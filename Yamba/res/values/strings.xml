@@ -31,5 +31,7 @@
     <string name="refresh_interval_prefs_title">Auto refresh?</string>
     <string name="refresh_interval_prefs_summary">How often should we auto-refresh your timeline?</string>
     <string name="empty_timeline_message">Your timeline is empty. Refresh to get your friends\' posts.</string>
+    <string name="action_compose">Compose</string>
+    <string name="action_timeline">Timeline</string>
 
 </resources>

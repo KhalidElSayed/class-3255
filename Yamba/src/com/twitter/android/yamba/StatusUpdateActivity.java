@@ -80,8 +80,8 @@ public class StatusUpdateActivity extends Activity implements OnClickListener, T
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_refresh:
-                super.startService(new Intent(this, RefreshService.class));
+            case R.id.action_timeline:
+                super.startActivity(new Intent(this, TimelineActivity.class));
                 return true;
             case R.id.action_settings:
                 super.startActivity(new Intent(this, PrefsActivity.class));
