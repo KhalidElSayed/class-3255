@@ -78,6 +78,15 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
         Log.d(TAG, "onActivityCreated()");
     }
 
+    
+    //
+    // @Override
+    // public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo
+    // menuInfo) {
+    // super.onCreateContextMenu(menu, v, menuInfo);
+    // }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");

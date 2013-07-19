@@ -33,5 +33,6 @@
     <string name="empty_timeline_message">Your timeline is empty. Refresh to get your friends\' posts.</string>
     <string name="action_compose">Compose</string>
     <string name="action_timeline">Timeline</string>
+    <string name="action_repost">Repost</string>
 
 </resources>

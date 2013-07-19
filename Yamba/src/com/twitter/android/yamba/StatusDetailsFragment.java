@@ -13,6 +13,7 @@ import java.util.List;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.location.Address;
@@ -22,6 +23,9 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -63,7 +67,26 @@ public class StatusDetailsFragment extends Fragment implements LoaderCallbacks<C
         this.geocoder = new Geocoder(super.getActivity(),
                 super.getResources().getConfiguration().locale);
         super.getLoaderManager().initLoader(0, null, this);
+        super.setHasOptionsMenu(true);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.status_details, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_repost:
+                Intent intent = new Intent(super.getActivity(), StatusUpdateActivity.class);
+                intent.putExtra("status", "re: " + this.message.getText().toString());
+                super.startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
