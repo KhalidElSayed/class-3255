@@ -59,10 +59,7 @@ public class TimelineActivity extends Activity implements TimelineFragment.OnSta
                     .replace(R.id.status_details, statusDetailsFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         } else {
-            // TODO: switch to an implicit intent?
-            Intent intent = new Intent(this, StatusDetailsActivity.class);
-            intent.setData(statusUri);
-            super.startActivity(intent);
+            super.startActivity(new Intent(Intent.ACTION_VIEW, statusUri));
         }
     }
 

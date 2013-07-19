@@ -35,10 +35,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <!-- <action android:name="android.intent.action.PICK" /> -->
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.twitter.status" />
+            </intent-filter>
         </activity>
         <activity android:name="com.twitter.android.yamba.StatusDetailsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-            <!-- TODO: add support android.intent.action.VIEW -->
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.twitter.status" />
+            </intent-filter>
         </activity>
 
         <service android:name="com.twitter.android.yamba.StatusUpdateService" />
@@ -53,7 +67,7 @@
         <provider
             android:name="com.twitter.android.yamba.TimelineContentProvider"
             android:authorities="com.twitter.android.yamba.provider"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
